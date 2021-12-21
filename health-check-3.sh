@@ -108,7 +108,7 @@ FREESWAP=`free -m |  tail -1| awk '{print $4}'`
 FREESBC=`echo "scale=2;if($FREESWAP<1024 && $FREESWAP > 0) print 0;$FREESWAP/1024"|bc -l`
 
 #system information
-banner "Node Information"
+
 hostnamectl
 uptime=$(uptime|sed 's/.*up \([^,]*\), .*/\1/'); printf "\t    Uptime: $uptime\n"
 last_reboot=$(sudo last reboot | awk 'NR==2 {print $3 " " $4 " " $5 " " $6 " " $7}'); printf "       last reboot: $last_reboot\n"
@@ -122,14 +122,14 @@ printf "Swap free:\t\t"; grep SwapFree /proc/meminfo| awk '{printf(" %.0f GB\n",
 printf "Swap used:\t\t"; vmstat -s | grep -w "used swap" | awk '{printf(" %.0f GB\n", $1/1024/1024)}'
 printf "Load average:\t\t"; uptime|grep -o "load average.*"|awk '{print " "$3" " $4" " $5}'
 printf "CPU usage:\t\t"; mpstat -P ALL 1 5 -u | grep "^Average" | sed "s/Average://g" | grep -w "all" | awk '{print $NF}' | awk -F'.' '{print (" "100 -$1 "%")}'
-separator
+
 printf "\t\tTop process CPU\n"
 ps -eo pid,ppid,cmd,%cpu --sort=-%cpu | head
-separator
+
 printf "\t\tTop process Memory\n"
 ps -eo pid,ppid,cmd,%mem --sort=-%mem | head
-separator
-banner "Check zombie process"
+
+
 num_zomb_proc=$(ps -el | grep -i 'Z' | wc -l)
 if [ $num_zomb_proc -gt 0 ]; then
     printf "Number of zombie process:\t"; echo -e "$num_zomb_proc\n"
@@ -142,35 +142,35 @@ if [ $num_zomb_proc -gt 0 ]; then
 else
     printf "Zombie process status:\t No zombie process\n"
 fi
-separator
+
 #banner "NTP and synchronization"
 #printf "NTP information:\t"; ntpstat | awk 'NR==1 {print $0}'
 #printf "NTP lead field:\t\t"; ntpq -c rv | awk 'NR==1 {print $3}'
 #printf "NTP reach value:\t"; ntpq -p | awk 'NR==4 {print $7}'
-separator
+
 printf "\t\t Time and Date status\n"
 timedatectl
-banner "Network interfaces"
+
 printf "\t\tIP information\n"
 ifconfig|grep "inet " | column -t
 printf "\nNetwork RX-ERR:\t\t"; netstat -i|egrep -v "Iface|statistics"|awk '{sum += $4} END {print sum}'
 printf "Network TX-ERR:\t\t"; netstat -i|egrep -v "Iface|statistics"|awk '{sum += $8} END {print sum}'
-separator
+
 printf "\t\tBonding information\n"
 ip link show | grep "bond.*:" | grep UP | awk -F":" '{print $2}'
-separator
+
 printf "\t\tNetwork interface statistics\n"
 netstat -i | grep -v ^lo | column -t
-separator
+
 printf "\t\tCurrent bandwidth usage\n"
 #for interface in $(ip link show | awk '{print $2}' | grep -v '^[0-9]' | grep -v "@"| sed 's/:$//')
 #do
 #    printf "${interface}: "; sar 1 1 -n DEV | grep ${interface} | grep -v ^Average | tail -1 | awk '{print $6+$7 " Mb"}'
 #done
-separator
+
 printf "\t\t static routes\n"
 route -n
-banner "Filesystem and Disk information"
+
 printf "\t\tFilesystem > 75 percent usage:\n\n"
 for i in $(df -Ph|egrep -v "^Filesystem|mnt" | awk '{print $5"," $6}' | sort -nr) 
 do 
@@ -181,7 +181,7 @@ do
         break
     fi
 done
-separator
+
 
 printf "\n\n\t\t HealthChek Summary Report\n\n"
 printf "Time UP:\t\t"; uptime|sed 's/.*up \([^,]*\), .*/\1/' | awk '{if ($1 > 0) print "HEALTHY"; else print "WARNING"}'
