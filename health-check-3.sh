@@ -1,4 +1,13 @@
 #!/bin/bash 
+##-----NOTE: This script requires root privileges, otherwise anyone could run the script -------##
+##---- as a sudo user who got root privileges. -------------------------------------------------##
+##----------- "sudo /bin/bash <ScriptName>" ----------------------------------------------------##
+
+AUTHOR="Mustapha Bouhalleb"
+CONTACT="mbouhall@redhat.com"
+DATE="22.12.2021"
+VERSION="1.0.2"
+
 function sysstat {
 echo -e "
 #####################################################################
