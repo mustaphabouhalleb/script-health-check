@@ -15,7 +15,7 @@ echo -e "
 #####################################################################
 
 
-hostnamectl
+Host Information : `hostnamectl`
 Kernel Version   : `uname -r`
 Uptime           : `uptime | sed 's/.*up \([^,]*\), .*/\1/'`
 Last Reboot Time : `who -b | awk '{print $3,$4}'`
