@@ -1,5 +1,4 @@
 #!/bin/bash 
-EMAIL=''
 function sysstat {
 echo -e "
 #####################################################################
@@ -129,13 +128,3 @@ ${TOTALSBC}GB\t${USEDSBC}GB\t${FREESBC}GB\t$(($FREESWAP * 100 / $TOTALSWAP  ))%
 FILENAME="health-`hostname`-`date +%y%m%d`-`date +%H%M`.txt"
 sysstat > $FILENAME
 echo -e "Reported file $FILENAME generated in current directory." $RESULT
-if [ "$EMAIL" != '' ] 
-then
-	STATUS=`which mail`
-	if [ "$?" != 0 ] 
-	then
-		echo "The program 'mail' is currently not installed."
-	else
-		cat $FILENAME | mail -s "$FILENAME" $EMAIL
-	fi
-fi
