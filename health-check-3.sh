@@ -6,12 +6,10 @@ echo -e "
 #####################################################################
 
 
-Hostname         : `hostname`
+hostnamectl
 Kernel Version   : `uname -r`
 Uptime           : `uptime | sed 's/.*up \([^,]*\), .*/\1/'`
 Last Reboot Time : `who -b | awk '{print $3,$4}'`
-
-
 
 *********************************************************************
 CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
@@ -22,8 +20,6 @@ MPSTAT=$?
 if [ $MPSTAT != 0 ]
 then
 	echo "Please install mpstat!"
-	echo "On Debian based systems:"
-	echo "sudo apt-get install sysstat"
 	echo "On RHEL based systems:"
 	echo "yum install sysstat"
 else
@@ -107,11 +103,6 @@ USEDSBC=`echo "scale=2;if($USEDSWAP<1024 && $USEDSWAP > 0) print 0;$USEDSWAP/102
 FREESWAP=`free -m |  tail -1| awk '{print $4}'`
 FREESBC=`echo "scale=2;if($FREESWAP<1024 && $FREESWAP > 0) print 0;$FREESWAP/1024"|bc -l`
 
-#system information
-
-hostnamectl
-uptime=$(uptime|sed 's/.*up \([^,]*\), .*/\1/'); printf "\t    Uptime: $uptime\n"
-last_reboot=$(sudo last reboot | awk 'NR==2 {print $3 " " $4 " " $5 " " $6 " " $7}'); printf "       last reboot: $last_reboot\n"
 
 printf "Total RAM:\t\t"; grep MemTotal /proc/meminfo| awk '{printf(" %.0f GB\n", $2/1024/1024)}'
 printf "Memory free:\t\t"; grep MemFree /proc/meminfo| awk '{printf(" %.0f GB\n", $2/1024/1024)}'
