@@ -37,7 +37,7 @@ LSCPU=`which lscpu`
 LSCPU=$?
 if [ $LSCPU != 0 ]
 then
-	RESULT=$RESULT" lscpu required to producre acqurate reults"
+	RESULT=$RESULT" lscpu required to producre acqurate results"
 else
 cpus=`lscpu | grep -e "^CPU(s):" | cut -f2 -d: | awk '{print $1}'`
 i=0
